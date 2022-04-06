@@ -1,0 +1,24 @@
+﻿@page "/counter"
+@inject IJSRuntime JSRunTime
+
+<button @onclick="btnLogin_Click">Login</button>
+<button @onclick="btnLogout_Click">Logout</button>
+
+<AuthorizeView>
+    <h3>Hello World @(context.User.Identity.Name)</h3>
+</AuthorizeView>
+
+@code {
+
+    private async void btnLogin_Click()
+    {
+        var authModule = await JSRunTime.InvokeAsync<IJSObjectReference>("import", "./js/auth.js");
+        await authModule.InvokeVoidAsync("SignIn", "denis@voituron.net", "MyPassword", "/");
+    }
+
+    private async void btnLogout_Click()
+    {
+        var authModule = await JSRunTime.InvokeAsync<IJSObjectReference>("import", "./js/auth.js");
+        await authModule.InvokeVoidAsync("SignOut", "/");
+    }
+}
